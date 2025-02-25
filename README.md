@@ -1,5 +1,9 @@
 # inventory
 
+## Libraries
+- python-dotenv: Um die Umgebungsvariablen aus deiner .env-Datei zu laden. <br>
+- mysql-connector-python: Um eine Verbindung zu deiner MySQL-Datenbank herzustellen.
+
 ## MySQL-Database implementieren
 ### Lagerart:
 Das System bildet ein Lager für einen Einzelhandel ab, der verschiedene Produktkategorien (Klamotten und Sneaker) führt.
