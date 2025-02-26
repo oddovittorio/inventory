@@ -19,8 +19,24 @@ def add_product(produkt):
             print("Fehler beim Hinzufügen des Produkts:", e)
         finally:
             conn.close()
-  
-#def view_products():
+            
+def view_products():
+    conn = create_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            sql = "SELECT * FROM Produkte"
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            if rows:
+                for row in rows:
+                    print(row)
+            else:
+                print("Keine Produkte gefunden!")
+        except Error as e:
+            print("Fehler beim Abrufen der Produkte:", e)
+        finally:
+            conn.close()
   
 #def edit_product(artikelnummer, updated_data)
 
