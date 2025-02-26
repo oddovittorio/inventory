@@ -22,21 +22,18 @@ def add_product(produkt):
             
 def view_products():
     conn = create_connection()
+    products = [] # Leere Liste, in die wir die Produkte speichern
     if conn:
         try:
             cursor = conn.cursor()
             sql = "SELECT * FROM Produkte"
             cursor.execute(sql)
-            rows = cursor.fetchall()
-            if rows:
-                for row in rows:
-                    print(row)
-            else:
-                print("Keine Produkte gefunden!")
+            products = cursor.fetchall() # Alle Produkte aus der Datenbank abrufen und in products speichern
         except Error as e:
             print("Fehler beim Abrufen der Produkte:", e)
         finally:
             conn.close()  
+    return products # Gibt die Liste der Produkte zurück
 
 def delete_product(artikelnummer):
     """
