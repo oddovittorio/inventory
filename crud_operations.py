@@ -36,9 +36,7 @@ def view_products():
         except Error as e:
             print("Fehler beim Abrufen der Produkte:", e)
         finally:
-            conn.close()
-  
-#def edit_product(artikelnummer, updated_data)
+            conn.close()  
 
 def delete_product(artikelnummer):
     """
@@ -58,5 +56,24 @@ def delete_product(artikelnummer):
             print("Produkt erfolgreich gelöscht!")
         except Error as e:
             print("Fehler beim Löschen des Produkts:", e)
+        finally:
+            conn.close()
+
+def edit_product(product_id, updated_data):
+    conn = create_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            sql = """
+            UPDATE Produkte
+            SET beschreibung = %s, farbe = %s, größe = %s, kategorie = %s, marke = %s, preis = %s
+            WHERE artikelnummer = %s
+            """
+            # Wir kombinieren updated_data und product_id, damit der letzte Platzhalter befüllt wird.
+            cursor.execute(sql, updated_data + (product_id,))
+            conn.commit()
+            print("Produkt erfolgreich aktualisiert!")
+        except Error as e:
+            print("Fehler beim Aktualisieren des Produkts:", e)
         finally:
             conn.close()
