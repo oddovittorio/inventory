@@ -2,7 +2,8 @@
 
 ## Libraries
 - python-dotenv: Um die Umgebungsvariablen aus deiner .env-Datei zu laden. <br>
-- mysql-connector-python: Um eine Verbindung zu deiner MySQL-Datenbank herzustellen.
+- mysql-connector-python: Um eine Verbindung zu deiner MySQL-Datenbank herzustellen. <br>
+- tkinter: Zum erstellen des Frontends.
 
 ## MySQL-Database implementieren
 ### Lagerart:
