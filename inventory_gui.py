@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from crud_operations import view_products, add_product, delete_product
+from inventory_queries import view_products_with_stock
 
 root = tk.Tk()
 root.title("Inventory Management")
@@ -25,7 +26,7 @@ list_label = ttk.Label(left_frame, text="Produktliste:")
 list_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
 # ----- TREEVIEW -----
-columns = ("artikelnummer", "kategorie", "marke", "beschreibung", "groesse", "preis", "farbe")
+columns = ("artikelnummer", "kategorie", "marke", "beschreibung", "groesse", "preis", "farbe", "bestand")
 product_tree = ttk.Treeview(left_frame, columns=columns, show="headings")
 product_tree.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
 
@@ -37,6 +38,7 @@ product_tree.heading("beschreibung", text="Beschreibung")
 product_tree.heading("groesse", text="Größe")
 product_tree.heading("preis", text="Preis")
 product_tree.heading("farbe", text="Farbe")
+product_tree.heading("bestand", text="Bestand")
 
 # Optionale Spaltenbreiten
 product_tree.column("artikelnummer", width=100)
@@ -46,6 +48,7 @@ product_tree.column("groesse", width=50)
 product_tree.column("kategorie", width=100)
 product_tree.column("marke", width=100)
 product_tree.column("preis", width=50)
+product_tree.column("bestand", width=50)
 
 # Scrollbar für das Treeview
 scrollbar = ttk.Scrollbar(left_frame, orient="vertical", command=product_tree.yview)
@@ -55,7 +58,7 @@ product_tree.configure(yscrollcommand=scrollbar.set)
 # Update-Funktion
 def update_treeview():
     product_tree.delete(*product_tree.get_children())
-    products = view_products()
+    products = view_products_with_stock()
     if products:
         for product in products:
             # product = (artikelnummer, beschreibung, farbe, größe, kategorie, marke, preis)
