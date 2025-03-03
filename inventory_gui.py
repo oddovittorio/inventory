@@ -1,60 +1,70 @@
 import tkinter as tk
 from tkinter import ttk
-from crud_operations import view_products, add_product, delete_product 
+from crud_operations import view_products, add_product, delete_product
 
-# 1. Hauptfenster erstellen
 root = tk.Tk()
 root.title("Inventory Management")
 
-# 2. Hauptcontainer in zwei Frames unterteilen
-# Left-Frame für die Produktliste
+# Frames
 left_frame = ttk.Frame(root, padding="10")
 left_frame.grid(row=0, column=0, sticky="nsew")
 
-# Right-Frame für CRUD-Buttons und Searchbar
 right_frame = ttk.Frame(root, padding="10")
 right_frame.grid(row=0, column=1, sticky="nsew")
 
-# 3. Grid-Konfiguration, damit sich die Frames anpassen, wenn das Fenster skaliert wird
-root.columnconfigure(0, weight=1)
+# Grid-Konfiguration
+root.columnconfigure(0, weight=1) # Parameter: index (=Also welche Spalte angesprochen wird), weight (=Wie viel Platz die Spalte einnehmen soll beim Vergrößern des Fensters)
 root.columnconfigure(1, weight=1)
 root.rowconfigure(0, weight=1)
 
-# 4. Funktionen für die Datenbankoperationen
-def update_listbox():
-    # Leere zuerst die Listbox von Zeile null bis zum Ende
-    product_listbox.delete(0, tk.END)
-    
-    # Rufe die view_products-Funktion auf, die eine Liste von Produkten zurückgibt
-    products = view_products()
-    
-    # Falls Produkte vorhanden sind, füge sie der Listbox hinzu
-    if products:
-        for product in products:
-            product_listbox.insert(tk.END, product) #Mit jedem Durchlauf der Schleife wird ein Produkt an das Ende der Listbox angehängt, sodass am Ende alle Produkte in der Reihenfolge ihrer Iteration angezeigt werden.
-    else:
-        product_listbox.insert(tk.END, "Keine Produkte gefunden!")
-
-# Im Left-Frame: Produktliste
+left_frame.rowconfigure(1, weight=1)
+left_frame.columnconfigure(0, weight=1)
 
 # Label für die Produktliste
 list_label = ttk.Label(left_frame, text="Produktliste:")
 list_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
-# Listbox zur Anzeige der Produkte
-product_listbox = tk.Listbox(left_frame, width=40, height=20)
-product_listbox.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+# ----- TREEVIEW -----
+columns = ("artikelnummer", "kategorie", "marke", "beschreibung", "groesse", "preis", "farbe")
+product_tree = ttk.Treeview(left_frame, columns=columns, show="headings")
+product_tree.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
 
-# Scrollbar, die an die Listbox gebunden wird
-scrollbar = ttk.Scrollbar(left_frame, orient="vertical", command=product_listbox.yview)
+# Spaltenüberschriften
+product_tree.heading("artikelnummer", text="Artikelnummer")
+product_tree.heading("kategorie", text="Kategorie")
+product_tree.heading("marke", text="Marke")
+product_tree.heading("beschreibung", text="Beschreibung")
+product_tree.heading("groesse", text="Größe")
+product_tree.heading("preis", text="Preis")
+product_tree.heading("farbe", text="Farbe")
+
+# Optionale Spaltenbreiten
+product_tree.column("artikelnummer", width=100)
+product_tree.column("beschreibung", width=200)
+product_tree.column("farbe", width=50) 
+product_tree.column("groesse", width=50)
+product_tree.column("kategorie", width=100)
+product_tree.column("marke", width=100)
+product_tree.column("preis", width=50)
+
+# Scrollbar für das Treeview
+scrollbar = ttk.Scrollbar(left_frame, orient="vertical", command=product_tree.yview)
 scrollbar.grid(row=1, column=1, sticky="ns", padx=5, pady=5)
+product_tree.configure(yscrollcommand=scrollbar.set)
 
-# Die Listbox so konfigurieren, dass sie die Scrollbar nutzt
-product_listbox.config(yscrollcommand=scrollbar.set)
+# Update-Funktion
+def update_treeview():
+    product_tree.delete(*product_tree.get_children())
+    products = view_products()
+    if products:
+        for product in products:
+            # product = (artikelnummer, beschreibung, farbe, größe, kategorie, marke, preis)
+            product_tree.insert("", tk.END, values=product)
+    else:
+        pass
 
-# Refresh-Button zum Aktualisieren der Liste (zum Beispiel später verbunden mit view_products())
-refresh_button = ttk.Button(left_frame, text="Aktualisieren", command=update_listbox)
+# Refresh-Button
+refresh_button = ttk.Button(left_frame, text="Aktualisieren", command=update_treeview)
 refresh_button.grid(row=2, column=0, sticky="w", padx=5, pady=5)
 
-# Mainloop starten
 root.mainloop()
