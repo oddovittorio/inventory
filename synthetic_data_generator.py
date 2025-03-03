@@ -8,6 +8,8 @@ import itertools
 # Faker-Objekt mit deutscher Lokalisierung (wird hier z.B. für zufällige Farben verwendet)
 fake = Faker('de_DE')
 
+# __________Synthetische Produktdaten__________
+
 # Feste Definitionen für Klamotten
 
 # Marken für Klamotten – nur diese verwenden
@@ -169,3 +171,26 @@ with open('product_catalog.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer.writerow(record)
 
 print(f"{len(catalog)} Produktvarianten wurden in product_catalog.csv geschrieben.")
+
+# __________Synthetische Bestandsdaten__________
+
+# Wir lesen zuerst die Artikelnummern aus dem Produktkatalog aus.
+article_numbers = []
+
+with open('product_catalog.csv', 'r', encoding='utf-8') as infile:
+    reader = csv.DictReader(infile)
+    for row in reader:
+        article_numbers.append(row["artikelnummer"])
+
+# Jetzt generieren wir für jede Artikelnummer einen zufälligen Bestand
+# (zum Beispiel zwischen 5 und 25 Stück)
+with open('stock_data.csv', 'w', newline='', encoding='utf-8') as outfile:
+    writer = csv.writer(outfile)
+    # Schreibe die Kopfzeile
+    writer.writerow(["artikelnummer", "bestandsanzahl"])
+    
+    for article in article_numbers:
+        bestandsanzahl = random.randint(5, 25)
+        writer.writerow([article, bestandsanzahl])
+
+print(f"{len(article_numbers)} Bestandsdatensätze wurden in stock_data.csv geschrieben.")
