@@ -86,4 +86,18 @@ search_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 search_button = ttk.Button(right_frame, text="Suchen", command=lambda: search_products())
 search_button.grid(row=0, column=2, padx=5, pady=5, sticky="w")
 
+# Search-Function
+def search_products():
+    query = search_entry.get().strip()
+    if query:
+        results = view_products_with_stock(search_query=query)
+        product_tree.delete(*product_tree.get_children())
+        if results:
+            for product in results:
+                product_tree.insert("", tk.END, values=product)
+        else:
+            product_tree.insert("", tk.END, values=("Keine Ergebnisse gefunden", "", "", "", "", "", "", ""))
+    else:
+        update_treeview()
+
 root.mainloop()
