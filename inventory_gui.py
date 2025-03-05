@@ -21,6 +21,8 @@ root.rowconfigure(0, weight=1)
 left_frame.rowconfigure(1, weight=1)
 left_frame.columnconfigure(0, weight=1)
 
+# ____________________Left Frame____________________  #
+
 # Label für die Produktliste
 list_label = ttk.Label(left_frame, text="Produktliste:")
 list_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
@@ -69,5 +71,19 @@ def update_treeview():
 # Refresh-Button
 refresh_button = ttk.Button(left_frame, text="Aktualisieren", command=update_treeview)
 refresh_button.grid(row=2, column=0, sticky="w", padx=5, pady=5)
+
+# ----- Treeview ENDE -----
+
+# ____________________Right Frame____________________  #
+
+# Search-Label
+search_label = ttk.Label(right_frame, text="Suche:")
+search_label.grid(row=0, column=0, padx=5, pady=5, sticky="e")
+
+search_entry = ttk.Entry(right_frame, width=30)
+search_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+
+search_button = ttk.Button(right_frame, text="Suchen", command=lambda: search_products())
+search_button.grid(row=0, column=2, padx=5, pady=5, sticky="w")
 
 root.mainloop()
