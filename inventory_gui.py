@@ -96,7 +96,7 @@ def search_products():
             for product in results:
                 product_tree.insert("", tk.END, values=product)
         else:
-            product_tree.insert("", tk.END, values=("Keine Ergebnisse gefunden", "", "", "", "", "", "", ""))
+            product_tree.insert("", tk.END, values=("Keine Ergebnisse", "", "", "", "", "", "", ""))
     else:
         update_treeview()
 
